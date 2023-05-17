@@ -32,8 +32,6 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 
-
-
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -42,18 +40,24 @@ function App() {
   };
 
   const [result, setResult] = React.useState('');
-  const [error, setError] = React.useState('');
+  // const [error, setError] = React.useState('');
   const [isrecording, setIsRecording] = React.useState(false);
 
   voice.onSpeechStart = () => setIsRecording(true);
   voice.onSpeechEnd = () => setIsRecording(false);
-  voice.onSpeechError = err => setError(err.error);
+  // voice.onSpeechError = err => setError(err.error);
   voice.onSpeechResults = result => setResult(result.value[0]);
 
   ////////////////////////////////////////////////////////////////////////
+
+ 
    
  const [inputMassage, setInputMassage] = useState('')
  const [outCum, setOutCum] = useState ('')
+
+ const once = async ()=> {
+    await outCum('')
+ }
 
   const handlebuttonclick =()=>{
   console.log(inputMassage);
@@ -70,7 +74,7 @@ function App() {
     })
   }).then((response)=>response.json()).then((data)=>{
     console.log("answer>>>",data.choices[0].text);
-    setOutCum(data.choices[0].text)
+    setOutCum(data.choices[0].text.trim())
   })
   }
   
@@ -78,31 +82,52 @@ function App() {
      setInputMassage(text)
     }
     
-
+    
   /////////////////////////////////////////////////////////////////////////
 
   const startRecording = async () => {
-    try {
-      await voice.start('en-US');
-    } catch (error) {
-      setError(err);
-    }
+    // try {
+      await voice.start('ur');
+    // } catch (error) {
+    //   setError(err);
+    // }
   };
 
+
   const stopRecording = async () => {
-    try {
+    // try {
       await voice.stop();
-    } catch (error) {
-      setError(err);
-    }
+    // } catch (error) {
+    //   setError(err);
+    // }
   };
 
   const handlevoice = () => {
     Tts.setDefaultLanguage('ur');
     Tts.setDefaultRate(0.3);
-    Tts.setDefaultPitch(1.6);
+    Tts.setDefaultPitch(1.1);
     Tts.speak(outCum);
   };
+
+  async function ozz() {
+    if(result!==''){
+     await handlebuttonclick();
+     await setResult('')
+    }
+  }
+
+  async function onz()
+  {
+    if(outCum !== ' ' ){
+    await handlevoice();
+  }
+  setOutCum('')
+  // setResult('')
+}
+console.log("result..", result);
+  ozz()
+  
+  onz()
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -114,25 +139,26 @@ function App() {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <TouchableOpacity
-          onPress={isrecording ? stopRecording : startRecording}
+          onPress={isrecording ? stopRecording : startRecording }
           style={{
             width: 300,
-            height: 50,
+            height: 40,
             backgroundColor: 'blue',
             margin: 50,
             marginLeft: 50,
             justifyContent: 'center',
+            borderRadius: 20
           }}>
           <Text style={{fontSize: 20, marginLeft: 80}}>
             {' '}
             {isrecording ? 'StopRecording' : 'StartRecording'}
           </Text>
         </TouchableOpacity>
-        <Text style={{fontSize: 20, marginLeft: 80, color: 'white'}}>
+        {/* <Text style={{fontSize: 20, marginLeft: 80, color: 'white'}}>
           {' '}
           {result}
-        </Text>
-        <TouchableOpacity
+        </Text> */}
+        {/* <TouchableOpacity
           onPress={handlevoice}
           style={{
             width: 300,
@@ -143,15 +169,15 @@ function App() {
             justifyContent: 'center',
           }}>
           <Text style={{fontSize: 20, marginLeft: 120}}>Speak</Text>
-        </TouchableOpacity>
-        <Text style={{fontSize: 20, marginLeft: 80, color: 'white'}}>
+        </TouchableOpacity> */}
+        {/* <Text style={{fontSize: 20, marginLeft: 80, color: 'white'}}>
 
           {error}
-      </Text>
+      </Text> */}
 
         {/* /////////////////////////////////////// */}
           
-        <TouchableOpacity
+        {/* <TouchableOpacity
            onPress={handlebuttonclick}
           style={{
             width: 300,
@@ -162,7 +188,7 @@ function App() {
             justifyContent: 'center',
           }}>
           <Text style={{fontSize: 20, marginLeft: 80}}>Processes by AI</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
              
         <Text style={{fontSize: 20, margin: 20, color: 'white'}}>
          {outCum}
